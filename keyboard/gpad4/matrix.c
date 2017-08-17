@@ -43,8 +43,7 @@ static void unselect_rows(void);
 static void select_row(uint8_t row);
 
 
-void matrix_init(void)
-{
+void matrix_init(void) {
     // initialize row and col
     unselect_rows();
     init_cols();
@@ -56,8 +55,7 @@ void matrix_init(void)
     }
 }
 
-uint8_t matrix_scan(void)
-{
+uint8_t matrix_scan(void) {
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         select_row(i);
         _delay_us(30);  // without this wait read unstable value.
@@ -65,7 +63,9 @@ uint8_t matrix_scan(void)
         if (matrix_debouncing[i] != cols) {
             matrix_debouncing[i] = cols;
             if (debouncing) {
-                debug("bounce!: "); debug_hex(debouncing); debug("\n");
+                debug("bounce!: ");
+                debug_hex(debouncing);
+                debug("\n");
             }
             debouncing = DEBOUNCE;
         }
@@ -86,71 +86,65 @@ uint8_t matrix_scan(void)
 }
 
 inline
-matrix_row_t matrix_get_row(uint8_t row)
-{
+matrix_row_t matrix_get_row(uint8_t row) {
     return matrix[row];
 }
 
 /* Column pin configuration
- * col: 0   1   2   3   4   5   6                      7   8   9   10  11  12  13
- * pin: B0  B1  B3  F0  F1  D6  D7                     B1  B0  B5  B4  D7  D6  B3  (Rev.A)
+ * col: 0   1   2   3   4   5
+ * pin: B0  B1  B3  F0  F1  D6
  */
-static void  init_cols(void)
-{
+static void  init_cols(void) {
     // Input with pull-up(DDR:0, PORT:1)
     DDRF  &= ~(1<<0 | 1<<1);
     PORTF |=  (1<<0 | 1<<1);
     DDRD  &= ~(1<<7 | 1<<6);
-    PORTD |=  (1<<7 | 1<<6);
+    PORTD |=  (1<<6);
     DDRB  &= ~(1<<3 | 1<<1 | 1<<0);
     PORTB |=  (1<<3 | 1<<1 | 1<<0);
 }
 
-static matrix_row_t read_cols(void)
-{
+static matrix_row_t read_cols(void) {
     return (PINB&(1<<0) ? 0 : (1<<0)) |
            (PINB&(1<<1) ? 0 : (1<<1)) |
            (PINB&(1<<3) ? 0 : (1<<2)) |
            (PINF&(1<<0) ? 0 : (1<<3)) |
            (PINF&(1<<1) ? 0 : (1<<4)) |
-           (PIND&(1<<6) ? 0 : (1<<5)) |
-           (PIND&(1<<7) ? 0 : (1<<6));
+           (PIND&(1<<6) ? 0 : (1<<5));
 }
 
 /* Row pin configuration
  * row: 0   1   2   3   4
  * pin: D0  D1  D2  D3  D5
  */
-static void unselect_rows(void)
-{
+static void unselect_rows(void) {
     // Hi-Z(DDR:0, PORT:0) to unselect
     DDRD  &= ~0b00101111;
     PORTD &= ~0b00101111;
 }
 
-static void select_row(uint8_t row)
-{
+static void select_row(uint8_t row) {
     // Output low(DDR:1, PORT:0) to select
     switch (row) {
-        case 0:
-            DDRD  |= (1<<0);
-            PORTD &= ~(1<<0);
-            break;
-        case 1:
-            DDRD  |= (1<<1);
-            PORTD &= ~(1<<1);
-            break;
-        case 2:
-            DDRD  |= (1<<2);
-            PORTD &= ~(1<<2);
-            break;
-        case 3:
-            DDRD  |= (1<<3);
-            PORTD &= ~(1<<3);
-            break;
-        case 4:
-            DDRD  |= (1<<5);
-            PORTD &= ~(1<<5);
-            break;
+    case 0:
+        DDRD  |= (1<<0);
+        PORTD &= ~(1<<0);
+        break;
+    case 1:
+        DDRD  |= (1<<1);
+        PORTD &= ~(1<<1);
+        break;
+    case 2:
+        DDRD  |= (1<<2);
+        PORTD &= ~(1<<2);
+        break;
+    case 3:
+        DDRD  |= (1<<3);
+        PORTD &= ~(1<<3);
+        break;
+    case 4:
+        DDRD  |= (1<<5);
+        PORTD &= ~(1<<5);
+        break;
     }
 }

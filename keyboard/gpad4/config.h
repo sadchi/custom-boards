@@ -24,12 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT_ID      0x6060
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    geekhack
-#define PRODUCT         GPAD3
-#define DESCRIPTION     t.m.k. keyboard firmware for GPAD3
+#define PRODUCT         GPAD4
+#define DESCRIPTION     t.m.k. keyboard firmware for GPAD4
 
 /* key matrix size */
 #define MATRIX_ROWS 5
-#define MATRIX_COLS 7
+#define MATRIX_COLS 6
 
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
