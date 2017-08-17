@@ -20,8 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 
 
-void led_set(uint8_t usb_led)
-{
+void led_set(uint8_t usb_led) {
     if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
         // output low
         DDRB |= (1<<2);
